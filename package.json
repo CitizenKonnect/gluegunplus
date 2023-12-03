@@ -1,6 +1,6 @@
 {
   "name": "gluegunplus",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "short-description": "Gluegun Plus.",
   "description": "GluegunPlus extends the capabilities of the original Gluegun Node.js module, empowering developers to create command-line interfaces with enhanced automation features.",
   "private": false,
@@ -25,7 +25,8 @@
     "LICENSE",
     "readme.md",
     "docs",
-    "bin"
+    "bin",
+    "config"
   ],
   "license": "Apache-2.0",
   "dependencies": {
