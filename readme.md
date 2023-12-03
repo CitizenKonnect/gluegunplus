@@ -119,7 +119,7 @@ This modifies the gluegun directory by creating
 
 // the file to run...
 
-If you need to update to the latest version, run
+After writing the extension, you can create the files for the corresponding files using:
 
 ```bash
 npx gluegunplus update

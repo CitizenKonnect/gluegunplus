@@ -11,7 +11,3 @@ todo.md
 gtf
 tmp*
 
-src/commands/*
-!src/commands/commandsTemplate
-!src/commands/generate.ts
-!src/commands/gluegunplus.ts

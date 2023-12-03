@@ -4,6 +4,8 @@ import * as os from 'os'
 import * as path from 'path'
 import * as AdmZip from 'adm-zip'
 import * as fsExtra from 'fs-extra'
+import {  init } from "../commander";
+
 
 const username = 'CitizenKonnect'
 const repository = 'gluegunplus'
@@ -63,23 +65,33 @@ async function downloadLatestTagZip(): Promise<void> {
       )
 
       if (firstDir) {
-        let copyDirs_ = ['config', 'src/commands/commandsTemplate', 'src/commander.ts', 'src/commands/gluegunplus.ts', ]
+        let copyDirs_ = ['config', 'src/commands/commandsTemplate'/*not used*/, 'src/commander.ts', 'src/commands/gluegunplus.ts', ]
         const copyDirs = copyDirs_.map(dir=>path.join(extractDir, firstDir, dir))
         if (fs.existsSync(copyDirs[0])) {
           await fsExtra.copy(copyDirs[0], './config', {
             recursive: true,
             overwrite: false,
           })
-          for(let i=1; i<=2; i++){
+          for(let i=2; i<=2; i++){
             await fsExtra.copy(copyDirs[i], `./${copyDirs_[i]}`, {
             overwrite: true,
           })
           }
-          const files = fs.readdirSync("bin");
+          let files = fs.readdirSync("bin");
           if(files.length >0){
             let cliBin = files[0]
             if(fs.existsSync(`./src/commands/${cliBin}.ts`))
             await fsExtra.copy(copyDirs[3], `./src/commands/${cliBin}.ts`)
+
+            files = fs.readdirSync("src/commands");
+            let filesNotToDelete = ["commandsTemplate", "generate.ts", `${cliBin}.ts`]
+            files.map(file=>{
+              if(!filesNotToDelete.includes(file)){
+                fsExtra.unlinkSync( `./src/commands/${file}`)
+              }
+              // 
+            })
+            await init();
           }
           
         } else {
