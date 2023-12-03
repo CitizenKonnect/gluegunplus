@@ -128,5 +128,3 @@ npx gluegunplus update
 ## 5. License
 
 See [LICENSE](LICENSE.txt)
-
-**[⬆ back home](#table-of-contents)**

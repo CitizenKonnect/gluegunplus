@@ -15,3 +15,4 @@ src/commands/*
 !src/commands/commandsTemplate
 !src/commands/run.js
 !src/commands/generate.ts
+!src/commands/gluegunplus.ts
