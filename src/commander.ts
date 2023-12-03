@@ -349,11 +349,10 @@ const init = async () => {
   const templateContent = fs.readFileSync(templateFilePath, 'utf8')
   commands.forEach((command) => {
     const commandFileName = `${command}.ts`
-    const commandFilePath = path.join(commandsDir, commandFileName)
+    const commandFilePath = path.join(commandsDir, 'commands', commandFileName)
 
     // Replace placeholders in the template content with the command name
     // const fileContent = templateContent.replace(/{{commandName}}/g, command);
-
     fs.writeFileSync(commandFilePath, templateContent)
   })
 }
