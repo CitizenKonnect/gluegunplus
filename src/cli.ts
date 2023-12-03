@@ -1,5 +1,5 @@
 import { build } from 'gluegun'
-import { packageNames, init } from "./commander";
+import { packageNames } from "./commander";
 
 /**
  * Create the cli and kick it off
