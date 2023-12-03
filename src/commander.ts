@@ -10,7 +10,7 @@ const name = function () {
 }
 
 const nameFromFilePath = (filePath: string): string => {
-  return filePath.split('/').pop().replace(/\.ts/, '')
+  return filePath.split('/').pop().replace(/\.ts$/, '').replace(/\.js$/, '')
 }
 
 /**
