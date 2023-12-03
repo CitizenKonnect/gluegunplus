@@ -1,0 +1,8 @@
+{
+    "create/c": {
+        "description": "Modify gluegun project to add gluegun plus files"
+    },
+    "update/u":{
+        "description": "Update gluegun project after editing config.json"
+    }
+}

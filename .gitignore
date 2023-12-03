@@ -1,0 +1,17 @@
+.DS_Store
+node_modules
+npm-debug.log
+coverage
+.nyc_output
+dist
+build
+.vscode
+delete.md
+todo.md
+gtf
+tmp*
+
+src/commands/*
+!src/commands/commandsTemplate
+!src/commands/run.js
+!src/commands/generate.ts
