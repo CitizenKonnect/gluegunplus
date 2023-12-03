@@ -4,7 +4,6 @@ import * as os from 'os'
 import * as path from 'path'
 import * as AdmZip from 'adm-zip'
 import * as fsExtra from 'fs-extra'
-import { packageNames } from "../commander";
 
 const username = 'CitizenKonnect'
 const repository = 'gluegunplus'
@@ -27,7 +26,7 @@ async function getLatestTagZipUrl(
     const tags: GitHubTag[] = response.data
 
     if (tags.length > 0) {
-      const latestTagSha = tags[0].object.sha
+      const latestTagSha = (tags.pop()).object.sha
       const zipUrl = `https://github.com/${username}/${repository}/archive/${latestTagSha}.zip`
       return zipUrl
     } else {
@@ -72,14 +71,17 @@ async function downloadLatestTagZip(): Promise<void> {
             overwrite: false,
           })
           for(let i=1; i<=2; i++){
-            console.log()
             await fsExtra.copy(copyDirs[i], `./${copyDirs_[i]}`, {
             overwrite: true,
           })
           }
-          let cliBin = Object.keys(packageNames('bin'))[0]
-          console.log(cliBin)
-          // await fsExtra.copy(copyDirs[3], `./src/commands/${cliBin}.ts`)
+          const files = fs.readdirSync("bin");
+          if(files.length >0){
+            let cliBin = files[0]
+            if(fs.existsSync(`./src/commands/${cliBin}.ts`))
+            await fsExtra.copy(copyDirs[3], `./src/commands/${cliBin}.ts`)
+          }
+          
         } else {
           console.error(`'config' directory not found inside ${firstDir}.`)
         }
