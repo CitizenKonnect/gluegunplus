@@ -17,7 +17,7 @@ async function run(argv) {
   // this can improve performance if they're not necessary for your project:
   // .exclude(['meta', 'strings', 'print', 'filesystem', 'semver', 'system', 'prompt', 'http', 'template', 'patching', 'package-manager'])
   // and run it
-  await init();
+  // await init();
   const toolbox = await cli.run(argv)
 
   // send it back (for testing, mostly)
