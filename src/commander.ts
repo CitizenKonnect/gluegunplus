@@ -341,15 +341,13 @@ const commands = (current: string) => {
 const init = async () => {
   let commands = Object.keys(jsonCommands)
   commands = commands.map((command) => command.replace(/\/.*$/, ''))
-  // const currentDirectory = process.cwd();
-  // const commandsDir = path.join(process.cwd(), 'src', 'commands')
-  const commandsDir = __dirname
+  const commandsDir = process.cwd();
   // const templateFilePath = path.join(commandsDir, 'commands', 'commandsTemplate')
-  const templateFilePath = path.join(commandsDir, '../config', 'commandsTemplate')
+  const templateFilePath = path.join(commandsDir, 'config', 'commandsTemplate')
   const templateContent = fs.readFileSync(templateFilePath, 'utf8')
   commands.forEach((command) => {
     const commandFileName = `${command}.ts`
-    const commandFilePath = path.join(commandsDir, 'commands', commandFileName)
+    const commandFilePath = path.join(commandsDir, 'src', 'commands', commandFileName)
 
     // Replace placeholders in the template content with the command name
     // const fileContent = templateContent.replace(/{{commandName}}/g, command);
