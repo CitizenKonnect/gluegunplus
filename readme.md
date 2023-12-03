@@ -125,6 +125,10 @@ If you need to update to the latest version, run
 npx gluegunplus update
 ```
 
-## 5. License
+## 5. Fixes
+### Chalk
+`npm install chalk@4.1.0`
+
+## 6. License
 
 See [LICENSE](LICENSE.txt)
