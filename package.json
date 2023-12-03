@@ -29,9 +29,12 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "adm-zip": "^0.5.10",
     "await-to-js": "^3.0.0",
+    "axios": "^1.6.2",
     "chalk": "^4.1.0",
     "figlet": "^1.7.0",
+    "fs-extra": "^11.2.0",
     "gluegun": "latest"
   },
   "devDependencies": {

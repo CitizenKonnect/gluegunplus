@@ -119,7 +119,7 @@ This modifies the gluegun directory by creating
 
 // the file to run...
 
-After updating `commands.json` and 
+If you need to update to the latest version, run
 
 ```bash
 npx gluegunplus update
