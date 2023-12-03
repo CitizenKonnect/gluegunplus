@@ -14,6 +14,9 @@ jobs:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm publish
+      - name: npm publish
+        run: |
+          TAG=$(echo "${{ github.ref }}" | cut -d '/' -f 3) # Extract tag from github.ref
+          npm publish --tag "${TAG}" --access public # Publish with the extracted tag
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
