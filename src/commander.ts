@@ -340,7 +340,7 @@ const commands = (current: string) => {
 
 const init = async () => {
   console.log(process.cwd())
-  const jsonCommands = require(path.join(process.cwd(),"./config/commands.json"));
+  const jsonCommands = require(path.join(process.cwd(),"config", "commands.json"));
   let commands = Object.keys(jsonCommands)
   commands = commands.map((command) => command.replace(/\/.*$/, ''))
   const commandsDir = process.cwd();
