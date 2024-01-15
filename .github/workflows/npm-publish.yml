@@ -1,8 +1,21 @@
 name: Publish Package to npmjs
+# on:
+#   push:
+#     tags:
+#       - 'v*'
+# trigger
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    # Execute the action on closed (merged) PR.
+    types:
+      [closed]
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
