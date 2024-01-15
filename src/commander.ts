@@ -10,7 +10,7 @@ const name = function () {
 }
 
 const nameFromFilePath = (filePath: string): string => {
-  return ( path.basename(filePath)).replace(/\.ts$/, '').replace(/\.js$/, '')
+  return path.basename(filePath).replace(/\.ts$/, '').replace(/\.js$/, '')
 }
 
 /**
@@ -223,8 +223,13 @@ const validateOptions = (supplied, required) => {
   let requiredOptions = required.required || {}
   let optionalOptions = required.optional || {}
   let suppliedKeys = Object.keys(supplied).map((key) => key.replace(/^\-+/, ''))
-  Object.keys(requiredOptions).map((key) => {
-    if (!suppliedKeys.includes(key)) throw `Required arg ${key} missing.`
+   Object.keys(requiredOptions).map((key) => {
+    let keys = key.split('/')
+    let keyFound = false
+    keys.map((innerKey) => {
+      if (suppliedKeys.includes(innerKey)) keyFound = true
+    })
+    if (!keyFound) throw `Required arg ${commandActionFromFullCommand(key, '')} missing.`
   })
   Object.keys(optionalOptions).map((key) => {
     requiredOptions[key] = optionalOptions[key]
@@ -232,17 +237,26 @@ const validateOptions = (supplied, required) => {
   const errors = {}
   let supplieds = {}
   Object.keys(supplied).map((key) => {
+   
     let key_ = key.replace(/^\-+/, '')
     supplieds[key_] = supplied[key]
+    delete supplied[key]
   })
-
+  let tmp = {}
+  for (let i in requiredOptions) {
+    let ii = i.split('/')
+    ii.map((key) => {
+      tmp[key] = requiredOptions[i]
+    })
+  }
   for (const key in supplieds) {
-    const option = requiredOptions[key]
+    // const option = requiredOptions[key]
+    const option = tmp[key]
     if (option === undefined) {
       throw `Unexpected arg ${key}`
     }
 
-    const inputValue = supplieds[key]
+    let inputValue = supplieds[key]
     if (typeof option === 'object') {
       switch (option.type) {
         case 'text':
@@ -258,21 +272,50 @@ const validateOptions = (supplied, required) => {
           }
           break
         case 'int':
-          const inputValueAsInt = parseInt(inputValue)
-          if (isNaN(inputValueAsInt)) {
-            errors[key] = `${key} should be an integer.`
-          } else if (option.range) {
-            const { min, max } = option.range
-            if (min !== undefined && inputValueAsInt < min) {
-              errors[key] = `${key} should be greater than or equal to ${min}.`
-            }
-            if (max !== undefined && inputValueAsInt > max) {
-              errors[key] = `${key} should be less than or equal to ${max}.`
+        case 'number':
+          {
+            const inputValueAsInt = parseInt(inputValue)
+            if (isNaN(inputValueAsInt)) {
+              errors[key] = `${key} should be an integer.`
+            } else if (option.range) {
+              const { min, max } = option.range
+              if (min !== undefined && inputValueAsInt < min) {
+                errors[
+                  key
+                ] = `${key} should be greater than or equal to ${min}.`
+                break;
+              }
+              if (max !== undefined && inputValueAsInt > max) {
+                errors[key] = `${key} should be less than or equal to ${max}.`
+                break;
+              }
+              supplieds[key] = inputValueAsInt;
             }
           }
           break
+        case 'bool':
+          switch(typeof inputValue){
+            case 'boolean':
+              break;
+            case "string":          
+              const lowercaseValue = inputValue.toLowerCase();
+              inputValue =  (lowercaseValue === 'true' ||  lowercaseValue === '1')?true:(lowercaseValue === 'false' ||  lowercaseValue === '0')?false:inputValue;
+              break;
+              case "number":
+                inputValue =  (inputValue>0)
+                break;
+            }
+            
+          if (typeof inputValue !== "boolean"){
+            errors[key] = `${key} should be a boolean.`
+            break
+          }
+            supplieds[key] = inputValue;
+          
+          break
       }
     }
+    supplied[key] = inputValue
   }
   if (Object.keys(errors).length > 0) throw Object.values(errors).join('\n')
 }
@@ -340,16 +383,25 @@ const commands = (current: string) => {
 
 const init = async () => {
   console.log(process.cwd())
-  const jsonCommands = require(path.join(process.cwd(),"config", "commands.json"));
+  const jsonCommands = require(path.join(
+    process.cwd(),
+    'config',
+    'commands.json'
+  ))
   let commands = Object.keys(jsonCommands)
   commands = commands.map((command) => command.replace(/\/.*$/, ''))
-  const commandsDir = process.cwd();
+  const commandsDir = process.cwd()
   // const templateFilePath = path.join(commandsDir, 'commands', 'commandsTemplate')
   const templateFilePath = path.join(commandsDir, 'config', 'commandsTemplate')
   const templateContent = fs.readFileSync(templateFilePath, 'utf8')
   commands.forEach((command) => {
     const commandFileName = `${command}.ts`
-    const commandFilePath = path.join(commandsDir, 'src', 'commands', commandFileName)
+    const commandFilePath = path.join(
+      commandsDir,
+      'src',
+      'commands',
+      commandFileName
+    )
 
     // Replace placeholders in the template content with the command name
     // const fileContent = templateContent.replace(/{{commandName}}/g, command);
