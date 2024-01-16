@@ -5,9 +5,9 @@ name: Publish Package to npmjs
 #       - 'v*'
 # trigger
 on:
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
   pull_request:
     branches:
       - master
@@ -30,3 +30,16 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      - name: Extract version from package.json
+        id: extract_version
+        run: echo ::set-output name=version::$(jq -r .version package.json)
+      
+      - name: Create Git Tag
+        run: git tag -a v${{ steps.extract_version.outputs.version }} -m "Release version v${{ steps.extract_version.outputs.version }}"
+
+      - name: Push Git Tag
+        run: git push origin v${{ steps.extract_version.outputs.version }}
+  
