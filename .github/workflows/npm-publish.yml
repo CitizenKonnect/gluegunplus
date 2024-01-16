@@ -38,6 +38,11 @@ jobs:
         id: extract_version
         run: echo ::set-output name=version::$(jq -r .version package.json)
       
+      - name: Configure Git Identity
+        run: |
+          git config --global user.email "${{ github.event.pull_request.user.login }}@users.noreply.github.com"
+          git config --global user.name "${{ github.event.pull_request.user.login }}"
+
       - name: Create Git Tag
         run: git tag -a v${{ steps.extract_version.outputs.version }} -m "Release version v${{ steps.extract_version.outputs.version }}"
 
